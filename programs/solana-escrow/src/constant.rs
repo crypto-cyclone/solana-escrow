@@ -1,0 +1,3 @@
+pub const SECONDS_PER_MINUTE: u64 = 60;
+pub const SECONDS_PER_HOUR: u64 = 3600;
+pub const SECONDS_PER_DAY: u64 = 86400;
