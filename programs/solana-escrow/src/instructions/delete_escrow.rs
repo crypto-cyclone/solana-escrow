@@ -1,7 +1,7 @@
 use anchor_lang::{prelude::*};
 use crate::state::EscrowAccount;
 
-pub fn invoke(ctx: Context<DeleteEscrowAccountContext>) -> Result<()> {
+pub fn invoke(_ctx: Context<DeleteEscrowAccountContext>) -> Result<()> {
     Ok(())
 }
 

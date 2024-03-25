@@ -31,19 +31,19 @@ pub fn invoke(ctx: Context<WithdrawEscrowAccountContext>) -> Result<()> {
     );
 
     let validation_ts = match escrow_account.withdraw_interval {
-        TimeInterval::SECOND => {
+        TimeInterval::Second => {
             let step_seconds = escrow_account.withdraw_interval_step;
             escrow_account.last_withdrawal_ts.saturating_add(step_seconds)
         }
-        TimeInterval::MINUTE => {
+        TimeInterval::Minute => {
             let step_seconds = escrow_account.withdraw_interval_step.saturating_mul(SECONDS_PER_MINUTE);
             escrow_account.last_withdrawal_ts.saturating_add(step_seconds)
         }
-        TimeInterval::HOUR => {
+        TimeInterval::Hour => {
             let step_seconds = escrow_account.withdraw_interval_step.saturating_mul(SECONDS_PER_HOUR);
             escrow_account.last_withdrawal_ts.saturating_add(step_seconds)
         }
-        TimeInterval::DAY => {
+        TimeInterval::Day => {
             let step_seconds = escrow_account.withdraw_interval_step.saturating_mul(SECONDS_PER_DAY);
             escrow_account.last_withdrawal_ts.saturating_add(step_seconds)
         }

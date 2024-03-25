@@ -15,8 +15,8 @@ pub struct EscrowAccount {
 
 #[derive(PartialEq, Copy, Clone, AnchorSerialize, AnchorDeserialize)]
 pub enum TimeInterval {
-    SECOND,
-    MINUTE,
-    HOUR,
-    DAY,
+    Second,
+    Minute,
+    Hour,
+    Day,
 }

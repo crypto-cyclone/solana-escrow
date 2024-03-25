@@ -1,6 +1,6 @@
 use anchor_lang::Accounts;
 use anchor_lang::context::Context;
-use anchor_lang::{prelude::*};
+use anchor_lang::{prelude::*, solana_program::{system_program}};
 use crate::state::{EscrowAccount, TimeInterval};
 use crate::util::{minimum_balance, transfer_lamports};
 
@@ -57,4 +57,7 @@ pub struct UpdateEscrowAccountContext<'info> {
 
     /// CHECK : no check necessary
     pub recipient: UncheckedAccount<'info>,
+
+    #[account(address=system_program::ID)]
+    pub system_program: Program<'info, System>,
 }
