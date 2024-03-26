@@ -10,7 +10,6 @@ import {
   sendAndConfirmTransaction, Keypair,
 } from "@solana/web3.js";
 import {expect} from "chai";
-import crypto from 'crypto';
 import BN from "bn.js";
 import * as bs58 from 'bs58';
 
@@ -22,6 +21,12 @@ describe("solana-escrow", () => {
 
   const owner = anchor.web3.Keypair.generate();
   const recipient = anchor.web3.Keypair.generate();
+
+  const FEE_RENT_CREATE_ESCROW = 4454400;
+  const FEE_TX_CREATE_ESCROW = 5000;
+  const FEE_TX_UPDATE_ESCROW = 5000;
+  const FEE_TX_WITHDRAW_ESCROW = 5000;
+  const FEE_TX_DELETE_ESCROW = 5000;
 
   before(async() => {
     await airdropToActors([owner.publicKey, recipient.publicKey]);
@@ -36,6 +41,8 @@ describe("solana-escrow", () => {
         recipient.publicKey
     );
 
+    const ownerLamports = await getLamports(owner.publicKey);
+
     await createEscrowAccount(
         owner,
         recipient.publicKey,
@@ -48,6 +55,8 @@ describe("solana-escrow", () => {
     const escrowAccountUpdate =
         await program.account.escrowAccount.fetch(escrowAccount);
 
+    const ownerLamportsUpdate = await getLamports(owner.publicKey);
+
     expect(escrowAccountUpdate.bump).to.be.eq(escrowBump);
     expect(Array.from(escrowAccountUpdate.owner.toBytes())).to.have.same.members(Array.from(owner.publicKey.toBytes()));
     expect(Array.from(escrowAccountUpdate.recipient.toBytes())).to.have.same.members(Array.from(recipient.publicKey.toBytes()));
@@ -58,6 +67,8 @@ describe("solana-escrow", () => {
     expect(escrowAccountUpdate.createdAtTs.toNumber()).to.be.gt(0);
     expect(escrowAccountUpdate.lastWithdrawalTs.toNumber()).to.be.eq(0);
 
+    expect(ownerLamportsUpdate).to.be.eq(ownerLamports - 10 - FEE_TX_CREATE_ESCROW - FEE_RENT_CREATE_ESCROW);
+
     await delay(1000);
   });
 
@@ -67,6 +78,8 @@ describe("solana-escrow", () => {
         recipient.publicKey
     );
 
+    const recipientLamports = await getLamports(recipient.publicKey);
+
     await withdrawEscrowAccount(
         owner.publicKey,
         recipient,
@@ -75,8 +88,12 @@ describe("solana-escrow", () => {
     const escrowAccountUpdate =
         await program.account.escrowAccount.fetch(escrowAccount);
 
+    const recipientLamportsUpdate = await getLamports(recipient.publicKey);
+
     expect(escrowAccountUpdate.lamports.toNumber()).to.be.eq(5);
     expect(escrowAccountUpdate.lastWithdrawalTs.toNumber()).to.be.gt(0);
+
+    expect(recipientLamportsUpdate).to.be.eq(recipientLamports + 5 - FEE_TX_WITHDRAW_ESCROW);
 
     await delay(1000);
   });
@@ -100,6 +117,8 @@ describe("solana-escrow", () => {
         recipient.publicKey
     );
 
+    const recipientLamports = await getLamports(recipient.publicKey);
+
     await withdrawEscrowAccount(
         owner.publicKey,
         recipient,
@@ -108,8 +127,12 @@ describe("solana-escrow", () => {
     const escrowAccountUpdate =
         await program.account.escrowAccount.fetch(escrowAccount);
 
+    const recipientLamportsUpdate = await getLamports(recipient.publicKey);
+
     expect(escrowAccountUpdate.lamports.toNumber()).to.be.eq(0);
     expect(escrowAccountUpdate.lastWithdrawalTs.toNumber()).to.be.gt(0);
+
+    expect(recipientLamportsUpdate).to.be.eq(recipientLamports + 5 - FEE_TX_WITHDRAW_ESCROW);
 
     await delay(1000);
   });
@@ -119,6 +142,8 @@ describe("solana-escrow", () => {
         owner.publicKey,
         recipient.publicKey
     );
+
+    const ownerLamports = await getLamports(owner.publicKey);
 
     await updateEscrowAccount(
         owner,
@@ -132,6 +157,8 @@ describe("solana-escrow", () => {
     const escrowAccountUpdate =
         await program.account.escrowAccount.fetch(escrowAccount);
 
+    const ownerLamportsUpdate = await getLamports(owner.publicKey);
+
     expect(escrowAccountUpdate.bump).to.be.eq(escrowBump);
     expect(Array.from(escrowAccountUpdate.owner.toBytes())).to.have.same.members(Array.from(owner.publicKey.toBytes()));
     expect(Array.from(escrowAccountUpdate.recipient.toBytes())).to.have.same.members(Array.from(recipient.publicKey.toBytes()));
@@ -142,6 +169,8 @@ describe("solana-escrow", () => {
     expect(escrowAccountUpdate.createdAtTs.toNumber()).to.be.gt(0);
     expect(escrowAccountUpdate.lastWithdrawalTs.toNumber()).to.be.gt(0);
 
+    expect(ownerLamportsUpdate).to.be.eq(ownerLamports - 60 - FEE_TX_UPDATE_ESCROW)
+
     await delay(1000);
   });
 
@@ -151,14 +180,21 @@ describe("solana-escrow", () => {
         recipient.publicKey
     );
 
+    const ownerLamports = await getLamports(owner.publicKey);
+    const escrowLamports = await getLamports(escrowAccount);
+
     await deleteEscrowAccount(
         owner,
         recipient.publicKey,
     );
 
+    const ownerLamportsUpdate = await getLamports(owner.publicKey);
+
     await program.account.escrowAccount.fetch(escrowAccount)
         .then(() => expect(false).to.be.true)
         .catch(() => expect(true).to.be.true);
+
+    expect(ownerLamportsUpdate).to.be.eq(ownerLamports - FEE_TX_DELETE_ESCROW + escrowLamports);
 
     await delay(1000);
   });
@@ -379,6 +415,10 @@ describe("solana-escrow", () => {
           "confirmed"
       );
     }
+  }
+
+  async function getLamports(pubkey: PublicKey) {
+    return await connection.getBalance(pubkey);
   }
 
   function delay(ms) {
