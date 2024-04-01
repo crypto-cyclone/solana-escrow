@@ -9,7 +9,7 @@ use anchor_lang::prelude::*;
 use crate::instructions::*;
 use crate::state::*;
 
-declare_id!("ipThDHDJhCK9wXoBshZzLQZuGrkbXfvQWR2MMhmH4Uz");
+declare_id!("escrocstqYuzPbAiYYeBr6GtZgi1LcDgAYD6zSnbfbT");
 
 #[program]
 pub mod solana_escrow {

@@ -1,7 +1,6 @@
 use anchor_lang::Accounts;
 use anchor_lang::context::Context;
 use anchor_lang::{prelude::*, solana_program::{system_program}};
-use crate::error::SolanaEscrowError;
 use crate::state::{EscrowAccount, TimeInterval};
 use crate::util::transfer_lamports;
 
@@ -14,7 +13,7 @@ pub fn invoke(
 ) -> Result<()> {
     let owner = &ctx.accounts.owner;
     let recipient = &ctx.accounts.recipient;
-    let mut escrow_account = &mut ctx.accounts.escrow_account;
+    let escrow_account = &mut ctx.accounts.escrow_account;
 
     let clock = Clock::get()?;
     let timestamp: u64 = clock.unix_timestamp.try_into().unwrap();

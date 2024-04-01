@@ -8,9 +8,8 @@ use crate::state::{EscrowAccount, TimeInterval};
 use crate::util::minimum_balance;
 
 pub fn invoke(ctx: Context<WithdrawEscrowAccountContext>) -> Result<()> {
-    let owner = &ctx.accounts.owner;
     let recipient = &ctx.accounts.recipient;
-    let mut escrow_account = &mut ctx.accounts.escrow_account;
+    let escrow_account = &mut ctx.accounts.escrow_account;
 
     let clock = Clock::get()?;
     let timestamp: u64 = clock.unix_timestamp.try_into().unwrap();

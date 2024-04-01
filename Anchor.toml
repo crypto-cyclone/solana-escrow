@@ -5,14 +5,14 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-solana_escrow = "ipThDHDJhCK9wXoBshZzLQZuGrkbXfvQWR2MMhmH4Uz"
+solana_escrow = "escrocstqYuzPbAiYYeBr6GtZgi1LcDgAYD6zSnbfbT"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
 cluster = "Localnet"
-wallet = "/Users/nullfinder/.config/solana/id.json"
+wallet = "/Volumes/CYCLONE-DEV/cyyc/cyyc.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

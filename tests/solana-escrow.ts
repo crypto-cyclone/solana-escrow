@@ -5,7 +5,6 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
-  SYSVAR_SLOT_HASHES_PUBKEY,
   Transaction,
   sendAndConfirmTransaction, Keypair,
 } from "@solana/web3.js";

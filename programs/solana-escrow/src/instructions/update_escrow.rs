@@ -12,7 +12,7 @@ pub fn invoke(
     withdraw_interval_step: u64,
 ) -> Result<()> {
     let owner = &ctx.accounts.owner;
-    let mut escrow_account = &mut ctx.accounts.escrow_account;
+    let escrow_account = &mut ctx.accounts.escrow_account;
 
     let available_lamports = escrow_account.to_account_info().get_lamports()
         .saturating_sub(minimum_balance::get(512));
