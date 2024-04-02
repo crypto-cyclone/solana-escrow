@@ -9,14 +9,11 @@ pub fn invoke(_ctx: Context<DeleteEscrowAccountContext>) -> Result<()> {
 pub struct DeleteEscrowAccountContext<'info> {
     #[account(
         mut,
-        seeds=[b"escrow_account", owner.key.as_ref(), recipient.key.as_ref()],
+        seeds=[b"escrow_account", owner.key.as_ref(), escrow_account.recipient.as_ref()],
         bump=escrow_account.bump,
         close=owner
     )]
     pub escrow_account: Account<'info, EscrowAccount>,
-
-    /// CHECK : no check necessary
-    pub recipient: UncheckedAccount<'info>,
 
     #[account(mut)]
     pub owner: Signer<'info>,

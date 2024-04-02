@@ -69,13 +69,10 @@ pub fn invoke(ctx: Context<WithdrawEscrowAccountContext>) -> Result<()> {
 pub struct WithdrawEscrowAccountContext<'info> {
     #[account(
         mut,
-        seeds=[b"escrow_account", owner.key.as_ref(), recipient.key.as_ref()],
+        seeds=[b"escrow_account", escrow_account.owner.as_ref(), recipient.key.as_ref()],
         bump=escrow_account.bump
     )]
     pub escrow_account: Account<'info, EscrowAccount>,
-
-    /// CHECK : no check necessary
-    pub owner: UncheckedAccount<'info>,
 
     #[account(mut)]
     pub recipient: Signer<'info>,

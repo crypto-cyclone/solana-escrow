@@ -47,16 +47,13 @@ pub fn invoke(
 pub struct UpdateEscrowAccountContext<'info> {
     #[account(
         mut,
-        seeds=[b"escrow_account", owner.key.as_ref(), recipient.key.as_ref()],
+        seeds=[b"escrow_account", owner.key.as_ref(), escrow_account.recipient.as_ref()],
         bump=escrow_account.bump
     )]
     pub escrow_account: Account<'info, EscrowAccount>,
 
     #[account(mut)]
     pub owner: Signer<'info>,
-
-    /// CHECK : no check necessary
-    pub recipient: UncheckedAccount<'info>,
 
     #[account(address=system_program::ID)]
     pub system_program: Program<'info, System>,

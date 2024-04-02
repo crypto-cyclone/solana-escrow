@@ -273,7 +273,6 @@ describe("solana-escrow", () => {
                 .accounts({
                   escrowAccount: escrowAccountPDA,
                   owner: owner.publicKey,
-                  recipient: recipient,
                   systemProgram: SystemProgram.programId
                 })
                 .transaction()
@@ -292,7 +291,6 @@ describe("solana-escrow", () => {
                     .accounts({
                       escrowAccount: escrowAccountPDA,
                       owner: owner.publicKey,
-                      recipient: recipient,
                       systemProgram: SystemProgram.programId
                     })
                     .transaction()
@@ -316,7 +314,6 @@ describe("solana-escrow", () => {
                 .withdrawEscrow()
                 .accounts({
                   escrowAccount: escrowAccountPDA,
-                  owner: owner,
                   recipient: recipient.publicKey,
                   systemProgram: SystemProgram.programId
                 })
@@ -330,8 +327,7 @@ describe("solana-escrow", () => {
                     .withdrawEscrow()
                     .accounts({
                       escrowAccount: escrowAccountPDA,
-                        owner: owner,
-                        recipient: recipient.publicKey,
+                      recipient: recipient.publicKey,
                       systemProgram: SystemProgram.programId
                     })
                     .transaction()
@@ -356,7 +352,6 @@ describe("solana-escrow", () => {
                 .accounts({
                   escrowAccount: escrowAccountPDA,
                   owner: owner.publicKey,
-                  recipient: recipient,
                 })
                 .transaction()
         )
@@ -369,7 +364,6 @@ describe("solana-escrow", () => {
                     .accounts({
                       escrowAccount: escrowAccountPDA,
                       owner: owner.publicKey,
-                      recipient: recipient,
                     })
                     .transaction()
             ),

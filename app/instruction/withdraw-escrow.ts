@@ -47,7 +47,6 @@ export async function withdrawEscrow(
                 .withdrawEscrow()
                 .accounts({
                     escrowAccount: accounts['escrowAccount'],
-                    owner: accounts['owner'],
                     recipient: accounts['recipient'],
                     systemProgram: accounts['systemProgram']
                 })

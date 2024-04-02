@@ -62,7 +62,6 @@ export async function updateEscrow(
                 .accounts({
                     escrowAccount: accounts['escrowAccount'],
                     owner: accounts['owner'],
-                    recipient: accounts['recipient'],
                     systemProgram: accounts['systemProgram']
                 })
                 .transaction()

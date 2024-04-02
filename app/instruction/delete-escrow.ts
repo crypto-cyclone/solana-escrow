@@ -47,7 +47,6 @@ export async function deleteEscrow(
                 .accounts({
                     escrowAccount: accounts['escrowAccount'],
                     owner: accounts['owner'],
-                    recipient: accounts['recipient'],
                 })
                 .transaction()
         );
